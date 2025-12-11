@@ -10,7 +10,7 @@ interface Campaign {
   impressions: number;
 }
 
-const API_URL = 'http://localhost:8000/campaigns'; 
+const API_BASE_URL = process.env.API_URL || 'http://localhost:8000';
 
 export default function CampaignDashboard() {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -22,7 +22,7 @@ export default function CampaignDashboard() {
     const fetchCampaigns = async () => {
       try {
         setLoading(true);
-        const response = await fetch(API_URL);
+        const response = await fetch(`${API_BASE_URL}/campaigns`);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -32,7 +32,7 @@ export default function CampaignDashboard() {
         setCampaigns(data);
       } catch (err) {
         if (err instanceof Error) {
-            setError(`Failed to fetch data: ${err.message}. Please check if your FastAPI backend is running at ${API_URL}`);
+            setError(`Failed to fetch data: ${err.message}. Please check if your FastAPI backend is running at ${API_BASE_URL}/campaigns`);
         } else {
             setError("An unknown error occurred while fetching data.");
         }

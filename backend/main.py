@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from typing import List
 import os 
 
-from .database import create_db_and_tables, SessionLocal, Campaign
+from database import create_db_and_tables, SessionLocal, Campaign
 
 class CampaignSchema(BaseModel):
     id: int
