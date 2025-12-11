@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from typing import List
+import os 
 
 from .database import create_db_and_tables, SessionLocal, Campaign
 
@@ -15,14 +16,15 @@ class CampaignSchema(BaseModel):
     impressions: int
 
     class Config:
-        from_attributes = True
+        from_attributes = True 
 
-app = FastAPI(title="Grippi Campaign Analytics API")
+app = FastAPI(title="Campaign Analytics API")
 
-origins = [
-    "http://localhost:3000",  
-    "https://your-vercel-frontend.vercel.app", 
-]
+CORS_STRING = os.environ.get(
+    "CORS_ORIGINS", 
+    "http://localhost:3000"
+)
+origins = [o.strip() for o in CORS_STRING.split(',')]
 
 app.add_middleware(
     CORSMiddleware,
@@ -41,16 +43,17 @@ def get_db():
 
 @app.on_event("startup")
 def on_startup():
-    create_db_and_tables()
+    """Executed when the application starts."""
+    create_db_and_tables() 
 
 @app.get("/campaigns", response_model=List[CampaignSchema])
 def read_campaigns(db: Session = Depends(get_db)):
     """
-    Returns a JSON list of all marketing campaigns.
+    Returns a JSON list of all marketing campaigns from the database.
     """
     campaigns = db.query(Campaign).all()
     
     if not campaigns:
-        raise HTTPException(status_code=404, detail="Campaign data not found. Please run the SQL setup script.")
+        raise HTTPException(status_code=404, detail="Campaign data not found. Ensure the SQL setup script has been run.")
     
     return campaigns
