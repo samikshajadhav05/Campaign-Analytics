@@ -1,12 +1,15 @@
+import os # <-- NEW IMPORT
 import sqlite3
 from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-DATABASE_URL = "sqlite:///./campaigns.db"
+DATABASE_URL = os.environ.get("DATABASE_URL", "sqlite:///./campaigns.db")
+
+connect_args = {"check_same_thread": False} if "sqlite" in DATABASE_URL else {}
 
 engine = create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False} 
+    DATABASE_URL, **connect_args 
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
