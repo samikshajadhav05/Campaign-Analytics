@@ -43,14 +43,10 @@ def get_db():
 
 @app.on_event("startup")
 def on_startup():
-    """Executed when the application starts."""
     create_db_and_tables() 
 
 @app.get("/campaigns", response_model=List[CampaignSchema])
 def read_campaigns(db: Session = Depends(get_db)):
-    """
-    Returns a JSON list of all marketing campaigns from the database.
-    """
     campaigns = db.query(Campaign).all()
     
     if not campaigns:
