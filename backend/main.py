@@ -19,12 +19,11 @@ class CampaignSchema(BaseModel):
         from_attributes = True 
 
 app = FastAPI(title="Campaign Analytics API")
-
 CORS_STRING = os.environ.get(
     "CORS_ORIGINS", 
-    "http://localhost:3000,https://campaign-analytics-ecru.vercel.app/"
+    "http://localhost:3000,https://campaign-analytics-placeholder.vercel.app"
 )
-origins = [o.strip() for o in CORS_STRING.split(',')]
+origins = [o.strip().rstrip('/') for o in CORS_STRING.split(',')]
 
 app.add_middleware(
     CORSMiddleware,
