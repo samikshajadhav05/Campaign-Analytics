@@ -22,7 +22,7 @@ app = FastAPI(title="Campaign Analytics API")
 
 CORS_STRING = os.environ.get(
     "CORS_ORIGINS", 
-    "http://localhost:3000"
+    "http://localhost:3000,https://campaign-analytics-ecru.vercel.app/"
 )
 origins = [o.strip() for o in CORS_STRING.split(',')]
 
