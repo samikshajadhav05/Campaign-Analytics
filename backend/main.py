@@ -20,8 +20,7 @@ class CampaignSchema(BaseModel):
 
 app = FastAPI(title="Campaign Analytics API")
 CORS_STRING = os.environ.get(
-    "CORS_ORIGINS", 
-    "http://localhost:3000,https://campaign-analytics-placeholder.vercel.app"
+    "CORS_ORIGINS"
 )
 origins = [o.strip().rstrip('/') for o in CORS_STRING.split(',')]
 
